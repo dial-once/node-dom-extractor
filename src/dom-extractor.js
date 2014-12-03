@@ -25,11 +25,25 @@ extractor.fetch = function(data, selector, callback) {
 			var $ = window.$;
 			$('body').html($(selector).wrap('<span/>').parent().html());
 			$('script').remove();
+			if (utils.isValidUrl(data)) {
+				$('link').each(function() {
+					$(this).attr('href', utils.relToAbs(data, $(this).attr('href')));
+				});
+				$('img').each(function() {
+					$(this).attr('src', utils.relToAbs(data, $(this).attr('src')));
+				});
+				$('a').each(function() {
+					$(this).attr('href', utils.relToAbs(data, $(this).attr('href')));
+				});
+			}
 			jsdomCallback(errors, window.document, callback);
 		}
 	};
 
 	if (utils.isValidUrl(data)) {
+		if (data.indexOf('http') !== 0) {
+			data = 'http://' + data;
+		}
 		jsdomconfig.url = data;
 	} else if (typeof data !== 'string') {
 		if (data instanceof Function) {
@@ -41,4 +55,18 @@ extractor.fetch = function(data, selector, callback) {
 	}
 
 	jsdom.env(jsdomconfig);
+};
+
+extractor.middleware = function(options) {
+	return function(req, res, next) {
+		var params = require('url').parse(req.url, true).query;
+		if (params.url !== undefined && params.selector !== undefined) {
+			extractor.fetch(params.url, params.selector, function(response) {
+				res.write(response);
+				res.end();
+			});
+		} else {
+			next();
+		}
+	};
 };
