@@ -1,5 +1,5 @@
 //test/dom-extractor-spec.js
-var domextractor = require("../src/dom-extractor");
+//var domextractor = require("../src/dom-extractor");
 
 describe("extractor fetcher", function() {
 	it("should handle empty parameter", function() {
