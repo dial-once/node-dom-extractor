@@ -1,6 +1,6 @@
 {
   "name": "dom-extractor",
-  "version": "0.0.0",
+  "version": "0.0.1",
   "description": "A remote HTML page DOM extractor",
   "main": "index.js",
   "scripts": {

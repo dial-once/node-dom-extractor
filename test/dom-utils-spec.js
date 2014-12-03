@@ -2,6 +2,15 @@
 var domutils = require("../src/dom-utils");
  
 describe("dom utils URL tools", function () {
+  it("should handle bad parameter [no param]", function () {
+    expect(domutils.isValidUrl()).toBe(false);
+  });
+  it("should handle bad parameter [null param]", function () {
+    expect(domutils.isValidUrl(null)).toBe(false);
+  });
+  it("should handle bad parameter [function param]", function () {
+    expect(domutils.isValidUrl(function(){})).toBe(false);
+  });
   it("should detect a valid URL [no protocol]", function () {
     expect(domutils.isValidUrl("www.google.fr")).toBe(true);
   });
