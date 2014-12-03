@@ -28,7 +28,7 @@ extractor.fetch("<div class='a'>Hello</div><div class='b'>World</div>!", ".a", f
 
 ## Running tests
 
-```sh
+```
 npm install
 npm install -g jshint
 npm test
