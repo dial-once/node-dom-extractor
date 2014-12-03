@@ -26,7 +26,13 @@ extractor.fetch = function(data, selector, callback) {
 			$('body').html($(selector).wrap('<span/>').parent().html());
 			$('script').remove();
 			if (utils.isValidUrl(data)) {
-				$('link').each(function(index) {
+				$('link').each(function() {
+					$(this).attr('href', utils.relToAbs(data, $(this).attr('href')));
+				});
+				$('img').each(function() {
+					$(this).attr('src', utils.relToAbs(data, $(this).attr('src')));
+				});
+				$('a').each(function() {
 					$(this).attr('href', utils.relToAbs(data, $(this).attr('href')));
 				});
 			}
