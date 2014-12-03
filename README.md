@@ -5,12 +5,11 @@ node-dom-extractor
 
 A node package used to extract a DOM element from a remote page or a string, using selectors. Based on jsdom for fetching and parsing, and juice for inlining css.
 
-## Install
+### Install
 
     npm install dom-extractor
 
-## Extract DOM from a remote URL
-
+### Extract DOM from a remote URL
 ```js
 var extractor = require('dom-extractor');
 extractor.fetch("http://github.com/", "div.header", function(data){
@@ -18,7 +17,7 @@ extractor.fetch("http://github.com/", "div.header", function(data){
 });
 ```
 
-## Extract DOM from a string
+### Extract DOM from a string
 ```js
 var extractor = require('dom-extractor');
 extractor.fetch("<div class='a'>Hello</div><div class='b'>World</div>!", ".a", function(data){
@@ -26,8 +25,12 @@ extractor.fetch("<div class='a'>Hello</div><div class='b'>World</div>!", ".a", f
 });
 ```
 
-## Running tests
+### Use it as a middleware (Connect)
+```js
+app.use('/proxy', extractor.middleware());
+```
 
+### Running tests
 ```
 npm install
 npm install -g jshint
