@@ -1,7 +1,7 @@
 {
   "name": "dom-extractor",
   "version": "0.0.1",
-  "description": "A remote HTML page DOM extractor",
+  "description": "A remote HTML page DOM extractor. Extracts what you want from a remote page or a string, using selectors. Based on jsdom for fetching and parsing, and juice for inlining css.",
   "main": "index.js",
   "scripts": {
     "pretest": "jshint src",

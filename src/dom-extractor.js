@@ -4,7 +4,9 @@ var utils = require('./dom-utils'),
 	extractor = module.exports;
 
 function jsdomCallback(errors, document, callback) {
-	juice.juiceDocument(document, {url: 'fake'}, function(error){
+	juice.juiceDocument(document, {
+		url: 'fake'
+	}, function() {
 		callback(document.body.innerHTML);
 	});
 }
@@ -30,7 +32,9 @@ extractor.fetch = function(data, selector, callback) {
 	if (utils.isValidUrl(data)) {
 		jsdomconfig.url = data;
 	} else if (typeof data !== 'string') {
-		if (data instanceof Function) callback();
+		if (data instanceof Function) {
+			callback();
+		}
 		return;
 	} else {
 		jsdomconfig.html = data;

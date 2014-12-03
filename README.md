@@ -1,6 +1,30 @@
 node-dom-extractor
 ==================
 [![Build Status](https://travis-ci.org/dial-once/node-dom-extractor.svg?branch=master)](https://travis-ci.org/dial-once/node-dom-extractor)
+[![Code Climate](https://codeclimate.com/github/dial-once/node-dom-extractor/badges/gpa.svg)](https://codeclimate.com/github/dial-once/node-dom-extractor)
 
+A noce package used to extract what you want from a remote page or a string, using selectors. Based on jsdom for fetching and parsing, and juice for inlining css.
 
-A node package to extract DOM from a remote HTML page
+## Install
+
+    npm install dom-extractor
+
+## Extract DOM from a remote URL
+
+    var extractor = require('dom-extractor');
+    extractor.fetch("http://github.com/", "div.header", function(data){
+    	//data contains the extracted HTML with css inlined, here the github header
+    });
+
+## Extract DOM from a string
+
+    var extractor = require('dom-extractor');
+    extractor.fetch("<div class='a'>Hello</div><div class='b'>World</div>!", ".a", function(data){
+    	//should contains the div with class a
+    });
+
+## Running tests
+
+	npm install
+    npm install -g jshint
+    npm test
