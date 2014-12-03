@@ -1,3 +1,8 @@
+.DS_Store
+.lock-wscript
+.wafpickle-*
+npm-debug.log
+
 # Logs
 logs
 *.log
