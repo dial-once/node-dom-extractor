@@ -25,6 +25,11 @@ extractor.fetch = function(data, selector, callback) {
 			var $ = window.$;
 			$('body').html($(selector).wrap('<span/>').parent().html());
 			$('script').remove();
+			if (utils.isValidUrl(data)) {
+				$('link').each(function(index) {
+					$(this).attr('href', utils.relToAbs(data, $(this).attr('href')));
+				});
+			}
 			jsdomCallback(errors, window.document, callback);
 		}
 	};
