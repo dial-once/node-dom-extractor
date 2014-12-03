@@ -30,6 +30,9 @@ extractor.fetch = function(data, selector, callback) {
 	};
 
 	if (utils.isValidUrl(data)) {
+		if (data.indexOf('http') !== 0) {
+			data = 'http://' + data;
+		}
 		jsdomconfig.url = data;
 	} else if (typeof data !== 'string') {
 		if (data instanceof Function) {
@@ -41,4 +44,18 @@ extractor.fetch = function(data, selector, callback) {
 	}
 
 	jsdom.env(jsdomconfig);
+};
+
+extractor.middleware = function(options) {
+	return function(req, res, next) {
+		var params = require('url').parse(req.url, true).query;
+		if (params.url !== undefined && params.selector !== undefined) {
+			extractor.fetch(params.url, params.selector, function(response) {
+				res.write(response);
+				res.end();
+			});
+		} else {
+			next();
+		}
+	};
 };

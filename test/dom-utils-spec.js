@@ -14,6 +14,9 @@ describe("dom utils URL tools", function () {
   it("should detect a valid URL [no protocol]", function () {
     expect(domutils.isValidUrl("www.google.fr")).toBe(true);
   });
+  it("should detect a valid URL [short TLD]", function () {
+    expect(domutils.isValidUrl("google.fr")).toBe(true);
+  });
   it("should detect a valid URL [long TLD]", function () {
     expect(domutils.isValidUrl("www.a.site.1.google.fr")).toBe(true);
   });
