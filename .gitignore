@@ -1,6 +1,7 @@
+# Mac Stuff
 .DS_Store
-.lock-wscript
-.wafpickle-*
+
+# Node Stuff
 npm-debug.log
 
 # Logs
