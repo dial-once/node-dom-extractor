@@ -11,20 +11,25 @@ A noce package used to extract what you want from a remote page or a string, usi
 
 ## Extract DOM from a remote URL
 
-    var extractor = require('dom-extractor');
-    extractor.fetch("http://github.com/", "div.header", function(data){
-    	//data contains the extracted HTML with css inlined, here the github header
-    });
+```js
+var extractor = require('dom-extractor');
+extractor.fetch("http://github.com/", "div.header", function(data){
+	//data contains the extracted HTML with css inlined, here the github header
+});
+```
 
 ## Extract DOM from a string
-
-    var extractor = require('dom-extractor');
-    extractor.fetch("<div class='a'>Hello</div><div class='b'>World</div>!", ".a", function(data){
-    	//should contains the div with class a
-    });
+```js
+var extractor = require('dom-extractor');
+extractor.fetch("<div class='a'>Hello</div><div class='b'>World</div>!", ".a", function(data){
+	//should contains the div with class a
+});
+```
 
 ## Running tests
 
+```sh
 	npm install
     npm install -g jshint
     npm test
+```
