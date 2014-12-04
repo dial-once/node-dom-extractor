@@ -1,17 +1,36 @@
-var utils = require('./dom-utils'),
-	jsdom = require('jsdom'),
-	juice = require('juice'),
-	extractor = module.exports;
+var utils 		= require('./dom-utils'),
+	jsdom 		= require('jsdom'),
+	juice 		= require('juice'),
+	NodeCache 	= require('node-cache'),
+	extractor 	= module.exports;
 
-function jsdomCallback(errors, document, callback) {
+var nodeCache 	= new NodeCache();
+
+function jsdomCallback(cacheKey, document, callback) {
 	juice.juiceDocument(document, {
 		url: 'fake'
 	}, function() {
+		if(cacheKey !== null){
+			nodeCache.set(cacheKey, document.body.innerHTML);
+		}
 		callback(document.body.innerHTML);
 	});
 }
 
 extractor.fetch = function(data, selector, callback) {
+	var cacheKey 	= null;
+	var isValidUrl 	= utils.isValidUrl(data);
+
+	if(isValidUrl){
+		cacheKey 		= data + '#' + selector;
+		var cachedValue = nodeCache.get(cacheKey);
+		
+		if(cachedValue[cacheKey] !== undefined){
+			callback(cachedValue[cacheKey]);
+			return;
+		}
+	}
+
 	if (selector instanceof Function) {
 		callback = selector;
 		selector = 'body';
@@ -25,7 +44,8 @@ extractor.fetch = function(data, selector, callback) {
 			var $ = window.$;
 			$('body').html($(selector).wrap('<span/>').parent().html());
 			$('script').remove();
-			if (utils.isValidUrl(data)) {
+
+			if (isValidUrl) {
 				$('link').each(function() {
 					$(this).attr('href', utils.relToAbs(data, $(this).attr('href')));
 				});
@@ -36,11 +56,11 @@ extractor.fetch = function(data, selector, callback) {
 					$(this).attr('href', utils.relToAbs(data, $(this).attr('href')));
 				});
 			}
-			jsdomCallback(errors, window.document, callback);
+			jsdomCallback(cacheKey, window.document, callback);
 		}
 	};
 
-	if (utils.isValidUrl(data)) {
+	if (isValidUrl) {
 		if (data.indexOf('http') !== 0) {
 			data = 'http://' + data;
 		}
@@ -53,9 +73,10 @@ extractor.fetch = function(data, selector, callback) {
 	} else {
 		jsdomconfig.html = data;
 	}
-
+	
 	jsdom.env(jsdomconfig);
 };
+
 
 extractor.middleware = function(options) {
 	return function(req, res, next) {

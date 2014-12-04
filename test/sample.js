@@ -6,5 +6,9 @@ domextractor.fetch("<html><head><style>.b{background-color:#eee}</style></head><
 
 //github header
 domextractor.fetch("https://github.com/", 'div.header', function(data){
-	console.log(data);
+	//value should be cached
+	domextractor.fetch("https://github.com/", 'div.header', function(data){
+		console.log(data);
+	});
 });
+
