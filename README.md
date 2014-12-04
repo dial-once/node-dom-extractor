@@ -2,6 +2,8 @@ node-dom-extractor
 ==================
 [![Build Status](https://travis-ci.org/dial-once/node-dom-extractor.svg?branch=master)](https://travis-ci.org/dial-once/node-dom-extractor)
 [![Codacy Badge](https://img.shields.io/codacy/3e4f92342e704e48a14f24b235c94935.svg)](https://www.codacy.com/public/dialonce/node-dom-extractor)
+[![Dependency Status](https://david-dm.org/dial-once/node-dom-extractor.svg)](https://david-dm.org/dial-once/node-dom-extractor)
+
 
 A node package used to extract a DOM element from a remote page or a string, using selectors. Based on jsdom for fetching and parsing, and juice for inlining css.
 
