@@ -55,6 +55,9 @@ extractor.fetch = function(data, selector, callback) {
 				$('a').each(function() {
 					$(this).attr('href', utils.relToAbs(data, $(this).attr('href')));
 				});
+				$('form').each(function() {
+					$(this).attr('action', utils.relToAbs(data, $(this).attr('action')));
+				});
 			}
 			jsdomCallback(cacheKey, window.document, callback);
 		}
