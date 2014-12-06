@@ -27,6 +27,10 @@ extractor.fetch("<div class='a'>Hello</div><div class='b'>World</div>!", ".a", f
 });
 ```
 
+#### Note about # selector
+When you use # as a selector, the browser do not send the data since it is a keyword for anchoring things in page, browser side.  
+To use it anyway, use |sharp| as the selector.
+
 ### Use it as a middleware (Connect)
 ```js
 app.use('/proxy', extractor.middleware());
