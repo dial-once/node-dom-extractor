@@ -6,21 +6,33 @@ var utils = require('./dom-utils'),
 
 var nodeCache = new NodeCache();
 
-function jsdomCallback(cacheKey, document, callback) {
+function jsdomCallback($, cacheKey, options, document, callback) {
 	if (document.body === null) {
 		callback('');
 		return;
 	}
 
-	juice.juiceDocument(document, {
-		url: 'fake'
-	}, function() {
-
-		if (cacheKey !== null) {
-			nodeCache.set(cacheKey, document.body.innerHTML);
+	if (options.inlineCss) {
+		juice.juiceDocument(document, {
+			url: 'fake'
+		}, function() {
+			if (cacheKey !== null) {
+				nodeCache.set(cacheKey, document.body.innerHTML);
+			}
+			
+			if (options.innerText) {
+				callback($(document.body).text());
+			} else {
+				callback(document.body.innerHTML);
+			}
+		});
+	} else {
+		if (options.innerText) {
+			callback($(document.body).text());
+		} else {
+			callback(document.body.innerHTML);
 		}
-		callback(document.body.innerHTML);
-	});
+	}
 }
 
 function cleanRelativePathes($, absoluteUrl) {
@@ -38,12 +50,48 @@ function cleanRelativePathes($, absoluteUrl) {
 	});
 }
 
-extractor.fetch = function(data, selector, callback) {
+
+function cleanOptions(options) {
+	
+	if (options === undefined) {
+		options.selector = 'body';
+	} else if (typeof options === 'string') { // keeping compatiblity with version < v0.0.7
+		if (options === '/') {
+			options = {
+				selector: 'body'
+			};
+		} else {
+			options = {
+				selector: options
+			};
+		}
+	} else {
+		options.selector = options.selector.replace('\\', '');
+	}
+
+	if(options.inlineCss === undefined){
+		options.inlineCss = true;
+	}
+	if(options.innerText === undefined){
+		options.innerText = false;
+	}
+	
+	return options;
+}
+
+extractor.fetch = function(data, options, callback) {
 	var cacheKey = null;
 	var isValidUrl = utils.isValidUrl(data);
 
+	if (options instanceof Function) {
+		callback = options;
+		options = undefined;
+	}
+
+	options = cleanOptions(options);
+
 	if (isValidUrl) {
-		cacheKey = data + '#' + selector;
+		cacheKey = data + '#' + options.selector + '#css' + options.inlineCss + '#innerText' + options.innerText;
 		var cachedValue = nodeCache.get(cacheKey);
 
 		if (cachedValue[cacheKey] !== undefined) {
@@ -52,27 +100,18 @@ extractor.fetch = function(data, selector, callback) {
 		}
 	}
 
-	if (selector instanceof Function) {
-		callback = selector;
-		selector = 'body';
-	} else if (typeof selector !== 'string' || selector === '/') {
-		selector = 'body';
-	} else {
-		selector = selector.replace('\\', '');
-	}
-
 	var jsdomconfig = {
 		scripts: ["http://code.jquery.com/jquery.js"],
 		done: function(errors, window) {
 			var $ = window.$;
 
-			$('body').html($(selector).wrap('<span/>').parent().html());
+			$('body').html($(options.selector).wrap('<span/>').parent().html());
 			$('script').remove();
 
 			if (isValidUrl) {
 				cleanRelativePathes($, data);
 			}
-			jsdomCallback(cacheKey, window.document, callback);
+			jsdomCallback($, cacheKey, options, window.document, callback);
 		}
 	};
 
@@ -81,11 +120,6 @@ extractor.fetch = function(data, selector, callback) {
 			data = 'http://' + data;
 		}
 		jsdomconfig.url = data;
-	} else if (typeof data !== 'string') {
-		if (data instanceof Function) {
-			callback();
-		}
-		return;
 	} else {
 		jsdomconfig.html = data;
 	}
@@ -99,7 +133,9 @@ extractor.middleware = function(options) {
 		var params = require('url').parse(req.url, true).query;
 		if (params.url !== undefined && params.selector !== undefined) {
 			params.selector = params.selector.replace('|sharp|', '#');
-			extractor.fetch(params.url, params.selector, function(response) {
+			extractor.fetch(params.url, {
+				selector: params.selector
+			}, function(response) {
 				res.write(response);
 				res.end();
 			});

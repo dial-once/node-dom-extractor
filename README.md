@@ -31,6 +31,25 @@ extractor.fetch("<div class='a'>Hello</div><div class='b'>World</div>!", ".a", f
 When you use # as a selector, the browser do not send the data since it is a keyword for anchoring things in page, browser side.  
 To use it anyway, use |sharp| as the selector.
 
+#### Using options
+You can use options as the second parameter. List of current options are:
+
+```json
+{
+	selector: String, //set the selector for extraction default is body
+	innerText: Boolean, //get text only from extraction, no html or css default is false
+	inlineCss: Boolean //Put style in style attributes of extracted dom default is true
+}
+```
+
+Example, using div.header selector and getting text only from result:
+```js
+var extractor = require('dom-extractor');
+extractor.fetch("http://github.com/", { selector: "div.header", innerText: true }, function(data){
+	//data contains the extracted HTML with css inlined, here the github header
+});
+```
+
 ### Use it as a middleware (Connect)
 ```js
 app.use('/proxy', extractor.middleware());
