@@ -19,7 +19,7 @@ function jsdomCallback($, cacheKey, options, document, callback) {
 			if (cacheKey !== null) {
 				nodeCache.set(cacheKey, document.body.innerHTML);
 			}
-			
+
 			if (options.innerText) {
 				callback($(document.body).text());
 			} else {
@@ -52,7 +52,7 @@ function cleanRelativePathes($, absoluteUrl) {
 
 
 function cleanOptions(options) {
-	
+
 	if (options === undefined) {
 		options.selector = 'body';
 	} else if (typeof options === 'string') { // keeping compatiblity with version < v0.0.7
@@ -69,13 +69,13 @@ function cleanOptions(options) {
 		options.selector = options.selector.replace('\\', '');
 	}
 
-	if(options.inlineCss === undefined){
+	if (options.inlineCss === undefined) {
 		options.inlineCss = true;
 	}
-	if(options.innerText === undefined){
+	if (options.innerText === undefined) {
 		options.innerText = false;
 	}
-	
+
 	return options;
 }
 
