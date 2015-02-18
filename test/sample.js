@@ -28,3 +28,11 @@ domextractor.fetch("<html><head><style>.b{background-color:#eee}</style></head><
 }, function(d) {
 	console.log('D:', d);
 });
+
+domextractor.fetch("http://www.camif.fr/espace-service/livraison-gratuite.html", {
+	selector: '.contentpconseil',
+	innerText: false,
+	inlineCss: true
+}, function(e) {
+	console.log('E:', e);
+});

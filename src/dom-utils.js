@@ -18,7 +18,7 @@ utils.isValidUrl = function(uri) {
 
 //see http://stackoverflow.com/questions/7544550/javascript-regex-to-change-all-relative-urls-to-absolute
 utils.relToAbs = function(a, b) {
-	if(a === undefined || b === undefined || b.indexOf('//') === 0){
+	if(a === undefined || b === undefined){
 		return b;
 	}
 	return url.format(url.resolve(url.parse(a), url.parse(b)));
