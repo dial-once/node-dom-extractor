@@ -40,6 +40,10 @@ function cleanOptions(options) {
 		options.selector = options.selector.replace('\\', '');
 	}
 
+	if (options.removeLinks === undefined) {
+		options.removeLinks = false;
+	}
+
 	if (options.inlineCss === undefined) {
 		options.inlineCss = true;
 	}
@@ -50,14 +54,23 @@ function cleanOptions(options) {
 	return options;
 }
 
+function removeLinks($) {
+	$('a').remove();
+}
+
 function cssCallback($, options, callback) {
-	try{
+	try {
+		if (options.removeLinks) {
+			removeLinks($);
+		}
 		$('body').html($(options.selector) || '');
-		$('head').append('<style>'+options.extraCss+'</style>');
+		$('head').append('<style>' + options.extraCss + '</style>');
 		var cacheKey = options.data + '#' + options.selector + '#css' + options.inlineCss + '#innerText' + options.innerText;
-		nodeCache.set(cacheKey, juice.juiceDocument($, {extraCss: options.extraCss || ''})('body').html());
+		nodeCache.set(cacheKey, juice.juiceDocument($, {
+			extraCss: options.extraCss || ''
+		})('body').html());
 		callback(nodeCache.get(cacheKey)[cacheKey]);
-	}catch(e){
+	} catch (e) {
 		callback();
 	}
 }
@@ -70,9 +83,9 @@ function inlineCss($, options, callback) {
 		request({
 			uri: link.attr('href'),
 		}, function(error, response, body) {
-			try{
+			try {
 				cssom.parse(body);
-			}catch(e){
+			} catch (e) {
 				body = '';
 			}
 			$('head').append('<style>' + body + '</style>');
@@ -136,12 +149,13 @@ extractor.middleware = function(options) {
 		var params = require('url').parse(req.url, true).query;
 		if (params.url !== undefined && params.selector !== undefined) {
 			params.selector = params.selector.replace('|sharp|', '#');
-			if(params.extraCss !== undefined) {
+			if (params.extraCss !== undefined) {
 				params.extraCss = params.extraCss.replace('|sharp|', '#');
 			}
 			extractor.fetch(params.url, {
 				selector: params.selector,
-				extraCss: params.extraCss
+				extraCss: params.extraCss,
+				removeLinks: params.removeLinks || false
 			}, function(response) {
 				if (response !== undefined) {
 					res.write(response);
