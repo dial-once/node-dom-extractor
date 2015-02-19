@@ -63,6 +63,6 @@ describe("dom utils URL relative to absolute", function () {
     expect(domutils.relToAbs('https://github.com/a/?param=toto', 'http://bitbucket.com/dial-once.css')).toBe('http://bitbucket.com/dial-once.css');
   });
   it("should return correct absolute URL [absolute url without protocol]", function () {
-    expect(domutils.relToAbs('https://github.com/a/?param=toto', '//dial-once.css')).toBe('https://github.com//dial-once.css');
+    expect(domutils.relToAbs('https://github.com/a/?param=toto', '//dial-once.css')).toBe('//dial-once.css');
   });
 });

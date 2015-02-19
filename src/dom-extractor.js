@@ -3,7 +3,8 @@ var utils = require('./dom-utils'),
 	request = require('request'),
 	juice = require('juice'),
 	NodeCache = require('node-cache'),
-	extractor = module.exports;
+	extractor = module.exports,
+	cssom = require('cssom');
 
 var nodeCache = new NodeCache();
 
@@ -50,9 +51,12 @@ function cleanOptions(options) {
 }
 
 function cssCallback($, options, callback) {
+	callback(juice.juiceDocument($)('body').html());
+	/*
 	juice.juiceResources($.html(), {
 		webResources: {
-			relativeTo: 'http://www.camif.fr'
+			scripts: false,
+			images: false
 		}
 	}, function(err, html) {
 		console.log(err, html);
@@ -61,7 +65,22 @@ function cssCallback($, options, callback) {
 		} else {
 			callback();
 		}
-	});
+	});*/
+}
+
+function inlineCss($, options, callback) {
+	var link = $('link[rel="stylesheet"]').first();
+	if (link.attr('href') === undefined) {
+		cssCallback($, options, callback);
+	} else {
+		request({
+			uri: link.attr('href'),
+		}, function(error, response, body) {
+			$('head').append('<style>' + body + '</style>');
+			link.remove();
+			inlineCss($, options, callback);
+		});
+	}
 }
 
 function domCallback(html, options, callback) {
@@ -70,10 +89,10 @@ function domCallback(html, options, callback) {
 	$('script').remove();
 
 	if (options.isValidUrl) {
-		//cleanRelativePathes($, options.data);
+		cleanRelativePathes($, options.data);
 	}
 
-	cssCallback($, options, callback);
+	inlineCss($, options, callback);
 }
 
 extractor.fetch = function(data, options, callback) {

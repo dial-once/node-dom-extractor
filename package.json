@@ -28,6 +28,7 @@
   },
   "dependencies": {
     "cheerio": "^0.18.0",
+    "cssom": "^0.3.0",
     "juice": "^1.0.0",
     "node-cache": "^1.0.3",
     "url": "^0.10.1"
