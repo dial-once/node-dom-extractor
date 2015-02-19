@@ -53,7 +53,9 @@ function cleanOptions(options) {
 function cssCallback($, options, callback) {
 	try{
 		$('body').html($(options.selector) || '');
-		callback(juice.juiceDocument($)('body').html());
+		var cacheKey = options.data + '#' + options.selector + '#css' + options.inlineCss + '#innerText' + options.innerText;
+		nodeCache.set(cacheKey, juice.juiceDocument($)('body').html());
+		callback(nodeCache.get(cacheKey)[cacheKey]);
 	}catch(e){
 		callback();
 	}
