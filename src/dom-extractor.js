@@ -51,21 +51,12 @@ function cleanOptions(options) {
 }
 
 function cssCallback($, options, callback) {
-	callback(juice.juiceDocument($)('body').html());
-	/*
-	juice.juiceResources($.html(), {
-		webResources: {
-			scripts: false,
-			images: false
-		}
-	}, function(err, html) {
-		console.log(err, html);
-		if (html !== undefined) {
-			callback(cheerio.load(html)('body').html());
-		} else {
-			callback();
-		}
-	});*/
+	try{
+		$('body').html($(options.selector) || '');
+		callback(juice.juiceDocument($)('body').html());
+	}catch(e){
+		callback();
+	}
 }
 
 function inlineCss($, options, callback) {
@@ -76,6 +67,11 @@ function inlineCss($, options, callback) {
 		request({
 			uri: link.attr('href'),
 		}, function(error, response, body) {
+			try{
+				cssom.parse(body);
+			}catch(e){
+				body = '';
+			}
 			$('head').append('<style>' + body + '</style>');
 			link.remove();
 			inlineCss($, options, callback);
@@ -85,7 +81,6 @@ function inlineCss($, options, callback) {
 
 function domCallback(html, options, callback) {
 	var $ = cheerio.load(html);
-	$('body').html($(options.selector) || '');
 	$('script').remove();
 
 	if (options.isValidUrl) {
