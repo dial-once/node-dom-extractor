@@ -1,6 +1,6 @@
 {
   "name": "dom-extractor",
-  "version": "0.0.9",
+  "version": "0.0.10",
   "description": "A remote HTML page DOM extractor. Extracts what you want from a remote page or a string, using selectors. Based on request for fetching, cheerios for parsing, cssom for checking css rules and juice for inlining css.",
   "main": "index.js",
   "scripts": {
