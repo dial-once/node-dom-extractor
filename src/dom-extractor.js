@@ -53,8 +53,9 @@ function cleanOptions(options) {
 function cssCallback($, options, callback) {
 	try{
 		$('body').html($(options.selector) || '');
+		$('head').append('<style>'+options.extraCss+'</style>');
 		var cacheKey = options.data + '#' + options.selector + '#css' + options.inlineCss + '#innerText' + options.innerText;
-		nodeCache.set(cacheKey, juice.juiceDocument($)('body').html());
+		nodeCache.set(cacheKey, juice.juiceDocument($, {extraCss: options.extraCss || ''})('body').html());
 		callback(nodeCache.get(cacheKey)[cacheKey]);
 	}catch(e){
 		callback();
@@ -135,8 +136,12 @@ extractor.middleware = function(options) {
 		var params = require('url').parse(req.url, true).query;
 		if (params.url !== undefined && params.selector !== undefined) {
 			params.selector = params.selector.replace('|sharp|', '#');
+			if(params.extraCss !== undefined) {
+				params.extraCss = params.extraCss.replace('|sharp|', '#');
+			}
 			extractor.fetch(params.url, {
-				selector: params.selector
+				selector: params.selector,
+				extraCss: params.extraCss
 			}, function(response) {
 				if (response !== undefined) {
 					res.write(response);
