@@ -1,39 +1,12 @@
 var utils = require('./dom-utils'),
-	jsdom = require('jsdom'),
+	cheerio = require('cheerio'),
+	request = require('request'),
 	juice = require('juice'),
 	NodeCache = require('node-cache'),
-	extractor = module.exports;
+	extractor = module.exports,
+	cssom = require('cssom');
 
 var nodeCache = new NodeCache();
-
-function jsdomCallback($, cacheKey, options, document, callback) {
-	if (document.body === null) {
-		callback('');
-		return;
-	}
-
-	if (options.inlineCss) {
-		juice.juiceDocument(document, {
-			url: 'fake'
-		}, function() {
-			if (cacheKey !== null) {
-				nodeCache.set(cacheKey, document.body.innerHTML);
-			}
-
-			if (options.innerText) {
-				callback($(document.body).text());
-			} else {
-				callback(document.body.innerHTML);
-			}
-		});
-	} else {
-		if (options.innerText) {
-			callback($(document.body).text());
-		} else {
-			callback(document.body.innerHTML);
-		}
-	}
-}
 
 function cleanRelativePathes($, absoluteUrl) {
 	$('link').each(function() {
@@ -50,9 +23,7 @@ function cleanRelativePathes($, absoluteUrl) {
 	});
 }
 
-
 function cleanOptions(options) {
-
 	if (options === undefined) {
 		options.selector = 'body';
 	} else if (typeof options === 'string') { // keeping compatiblity with version < v0.0.7
@@ -79,6 +50,46 @@ function cleanOptions(options) {
 	return options;
 }
 
+function cssCallback($, options, callback) {
+	try{
+		$('body').html($(options.selector) || '');
+		callback(juice.juiceDocument($)('body').html());
+	}catch(e){
+		callback();
+	}
+}
+
+function inlineCss($, options, callback) {
+	var link = $('link[rel="stylesheet"]').first();
+	if (link.attr('href') === undefined) {
+		cssCallback($, options, callback);
+	} else {
+		request({
+			uri: link.attr('href'),
+		}, function(error, response, body) {
+			try{
+				cssom.parse(body);
+			}catch(e){
+				body = '';
+			}
+			$('head').append('<style>' + body + '</style>');
+			link.remove();
+			inlineCss($, options, callback);
+		});
+	}
+}
+
+function domCallback(html, options, callback) {
+	var $ = cheerio.load(html);
+	$('script').remove();
+
+	if (options.isValidUrl) {
+		cleanRelativePathes($, options.data);
+	}
+
+	inlineCss($, options, callback);
+}
+
 extractor.fetch = function(data, options, callback) {
 	var cacheKey = null;
 	var isValidUrl = utils.isValidUrl(data);
@@ -89,6 +100,7 @@ extractor.fetch = function(data, options, callback) {
 	}
 
 	options = cleanOptions(options);
+	options.isValidUrl = isValidUrl;
 
 	if (isValidUrl) {
 		cacheKey = data + '#' + options.selector + '#css' + options.inlineCss + '#innerText' + options.innerText;
@@ -100,31 +112,19 @@ extractor.fetch = function(data, options, callback) {
 		}
 	}
 
-	var jsdomconfig = {
-		scripts: ["http://code.jquery.com/jquery.js"],
-		done: function(errors, window) {
-			var $ = window.$;
-
-			$('body').html($(options.selector).wrap('<span/>').parent().html());
-			$('script').remove();
-
-			if (isValidUrl) {
-				cleanRelativePathes($, data);
-			}
-			jsdomCallback($, cacheKey, options, window.document, callback);
-		}
-	};
-
 	if (isValidUrl) {
 		if (data.indexOf('http') !== 0) {
 			data = 'http://' + data;
 		}
-		jsdomconfig.url = data;
+		options.data = data;
+		request({
+			uri: data,
+		}, function(error, response, body) {
+			domCallback(body, options, callback);
+		});
 	} else {
-		jsdomconfig.html = data;
+		domCallback(data, options, callback);
 	}
-
-	jsdom.env(jsdomconfig);
 };
 
 
@@ -136,7 +136,9 @@ extractor.middleware = function(options) {
 			extractor.fetch(params.url, {
 				selector: params.selector
 			}, function(response) {
-				res.write(response);
+				if (response !== undefined) {
+					res.write(response);
+				}
 				res.end();
 			});
 		} else {
