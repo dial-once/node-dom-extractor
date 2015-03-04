@@ -34,7 +34,7 @@ To use it anyway, use |sharp| as the selector.
 #### Using options
 You can use options as the second parameter. List of current options are:
 
-```json
+```js
 {
 	selector: String, //set the selector for extraction default is body
 	innerText: Boolean, //get text only from extraction, no html or css default is false
