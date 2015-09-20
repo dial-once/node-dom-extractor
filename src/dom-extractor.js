@@ -144,7 +144,7 @@ extractor.fetch = function(data, options, callback) {
 };
 
 
-extractor.middleware = function(options) {
+extractor.middleware = function() {
 	return function(req, res, next) {
 		var params = require('url').parse(req.url, true).query;
 		if (params.url !== undefined && params.selector !== undefined) {
