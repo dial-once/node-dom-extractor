@@ -1,68 +1,69 @@
-//test/dom-utils-spec.js
-var domutils = require("../src/dom-utils");
- 
-describe("dom utils URL validation", function () {
-  it("should handle bad parameter [no param]", function () {
-    expect(domutils.isValidUrl()).toBe(false);
+// test/dom-utils-spec.js
+const domutils = require('../src/dom-utils');
+const assert = require('assert');
+
+describe('dom utils URL validation', () => {
+  it('should handle bad parameter [no param]', () => {
+    assert.equal(domutils.isValidUrl(), false);
   });
-  it("should handle bad parameter [null param]", function () {
-    expect(domutils.isValidUrl(null)).toBe(false);
+  it('should handle bad parameter [null param]', () => {
+    assert.equal(domutils.isValidUrl(null), false);
   });
-  it("should handle bad parameter [function param]", function () {
-    expect(domutils.isValidUrl(function(){})).toBe(false);
+  it('should handle bad parameter [function param]', () => {
+    assert.equal(domutils.isValidUrl(() => {}), false);
   });
-  it("should detect a valid URL [no protocol]", function () {
-    expect(domutils.isValidUrl("www.google.fr")).toBe(true);
+  it('should detect a valid URL [no protocol]', () => {
+    assert.equal(domutils.isValidUrl('www.google.fr'), true);
   });
-  it("should detect a valid URL [short TLD]", function () {
-    expect(domutils.isValidUrl("google.fr")).toBe(true);
+  it('should detect a valid URL [short TLD]', () => {
+    assert.equal(domutils.isValidUrl('google.fr'), true);
   });
-  it("should detect a valid URL [long TLD]", function () {
-    expect(domutils.isValidUrl("www.a.site.1.google.fr")).toBe(true);
+  it('should detect a valid URL [long TLD]', () => {
+    assert.equal(domutils.isValidUrl('www.a.site.1.google.fr'), true);
   });
-  it("should detect a valid URL [http]", function () {
-    expect(domutils.isValidUrl("http://www.google.fr")).toBe(true);
+  it('should detect a valid URL [http]', () => {
+    assert.equal(domutils.isValidUrl('http://www.google.fr'), true);
   });
-  it("should detect a valid URL [https]", function () {
-    expect(domutils.isValidUrl("https://www.google.fr")).toBe(true);
+  it('should detect a valid URL [https]', () => {
+    assert.equal(domutils.isValidUrl('https://www.google.fr'), true);
   });
-  it("should detect a valid URL [path]", function () {
-    expect(domutils.isValidUrl("https://www.google.fr/ping/pong")).toBe(true);
+  it('should detect a valid URL [path]', () => {
+    assert.equal(domutils.isValidUrl('https://www.google.fr/ping/pong'), true);
   });
-  it("should detect a valid URL [parameters]", function () {
-    expect(domutils.isValidUrl("https://www.google.fr/thing/?value=ok")).toBe(true);
+  it('should detect a valid URL [parameters]', () => {
+    assert.equal(domutils.isValidUrl('https://www.google.fr/thing/?value=ok'), true);
   });
-  it("should detect an invalid URL [protocol malformed]", function () {
-    expect(domutils.isValidUrl("htt:/toto.fr")).toBe(false);
+  it('should detect an invalid URL [protocol malformed]', () => {
+    assert.equal(domutils.isValidUrl('htt:/toto.fr'), false);
   });
-  it("should detect an invalid URL [protocol unknow]", function () {
-    expect(domutils.isValidUrl("toto://toto.fr")).toBe(false);
+  it('should detect an invalid URL [protocol unknow]', () => {
+    assert.equal(domutils.isValidUrl('toto://toto.fr'), false);
   });
-  it("should detect an invalid URL [bad ending]", function () {
-    expect(domutils.isValidUrl("http://toto.f")).toBe(false);
+  it('should detect an invalid URL [bad ending]', () => {
+    assert.equal(domutils.isValidUrl('http://toto.f'), false);
   });
 });
 
-describe("dom utils URL relative to absolute", function () {
-  it("should return correct absolute URL [absolute URL]", function () {
-    expect(domutils.relToAbs('https://github.com', 'https://github.com')).toBe('https://github.com/');
+describe('dom utils URL relative to absolute', () => {
+  it('should return correct absolute URL [absolute URL]', () => {
+    assert.equal(domutils.relToAbs('https://github.com', 'https://github.com'), 'https://github.com/');
   });
-  it("should return correct absolute URL [relative URL]", function () {
-    expect(domutils.relToAbs('https://github.com', '/dial-once')).toBe('https://github.com/dial-once');
+  it('should return correct absolute URL [relative URL]', () => {
+    assert.equal(domutils.relToAbs('https://github.com', '/dial-once'), 'https://github.com/dial-once');
   });
-  it("should return correct absolute URL [relative URL ..]", function () {
-    expect(domutils.relToAbs('https://github.com/a/', '../dial-once')).toBe('https://github.com/dial-once');
+  it('should return correct absolute URL [relative URL ..]', () => {
+    assert.equal(domutils.relToAbs('https://github.com/a/', '../dial-once'), 'https://github.com/dial-once');
   });
-  it("should return correct absolute URL [complex URL]", function () {
-    expect(domutils.relToAbs('https://github.com/a/?param=toto', '/dial-once.css')).toBe('https://github.com/dial-once.css');
+  it('should return correct absolute URL [complex URL]', () => {
+    assert.equal(domutils.relToAbs('https://github.com/a/?param=toto', '/dial-once.css'), 'https://github.com/dial-once.css');
   });
-  it("should return correct absolute URL [complex URL]", function () {
-    expect(domutils.relToAbs('https://github.com/a/?param=toto', '/dial-once.css')).toBe('https://github.com/dial-once.css');
+  it('should return correct absolute URL [complex URL]', () => {
+    assert.equal(domutils.relToAbs('https://github.com/a/?param=toto', '/dial-once.css'), 'https://github.com/dial-once.css');
   });
-  it("should return correct absolute URL [URL on another domain]", function () {
-    expect(domutils.relToAbs('https://github.com/a/?param=toto', 'http://bitbucket.com/dial-once.css')).toBe('http://bitbucket.com/dial-once.css');
+  it('should return correct absolute URL [URL on another domain]', () => {
+    assert.equal(domutils.relToAbs('https://github.com/a/?param=toto', 'http://bitbucket.com/dial-once.css'), 'http://bitbucket.com/dial-once.css');
   });
-  it("should return correct absolute URL [absolute url without protocol]", function () {
-    expect(domutils.relToAbs('https://github.com/a/?param=toto', '//dial-once.css')).toBe('//dial-once.css');
+  it('should return correct absolute URL [absolute url without protocol]', () => {
+    assert.equal(domutils.relToAbs('https://github.com/a/?param=toto', '//dial-once.css'), '//dial-once.css');
   });
 });
