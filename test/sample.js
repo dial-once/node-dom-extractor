@@ -1,10 +1,11 @@
 const domextractor = require('./../src/dom-extractor');
+const assert = require('assert');
 
 domextractor.fetch("<html><head><style>.b{background-color:#eee}</style></head><body><div class='b'>"
   + "<a href='ok'>ok mec</a></div><div class='c'>ok</div></body></html>",
   '.b',
   (data) => {
-    console.log('A:', data);
+    assert.notEqual(data, undefined);
   });
 
 domextractor.fetch("<html><head><style>.b{background-color:#eee}</style></head><body><div class='b'>"
@@ -12,7 +13,7 @@ domextractor.fetch("<html><head><style>.b{background-color:#eee}</style></head><
     selector: '.b',
     innerText: true
   }, (b) => {
-    console.log('B:', b);
+    assert.notEqual(b, undefined);
   });
 
 domextractor.fetch("<html><head><style>.b{background-color:#eee}</style></head><body><div class='b'>"
@@ -21,7 +22,7 @@ domextractor.fetch("<html><head><style>.b{background-color:#eee}</style></head><
     innerText: true,
     inlineCss: false
   }, (c) => {
-    console.log('C:', c);
+    assert.notEqual(c, undefined);
   });
 
 domextractor.fetch("<html><head><style>.b{background-color:#eee}</style></head><body><div class='b'>"
@@ -30,7 +31,7 @@ domextractor.fetch("<html><head><style>.b{background-color:#eee}</style></head><
     innerText: false,
     inlineCss: false
   }, (d) => {
-    console.log('D:', d);
+    assert.notEqual(d, undefined);
   });
 
 domextractor.fetch("<html><head><style>.b{background-color:#eee}</style></head><body><div class='b'>"
@@ -40,7 +41,7 @@ domextractor.fetch("<html><head><style>.b{background-color:#eee}</style></head><
     inlineCss: false,
     removeLinks: true
   }, (e) => {
-    console.log('E:', e);
+    assert.notEqual(e, undefined);
   });
 
 domextractor.fetch('http://www.camif.fr/espace-service/livraison-gratuite.html', {
@@ -48,5 +49,5 @@ domextractor.fetch('http://www.camif.fr/espace-service/livraison-gratuite.html',
   innerText: false,
   inlineCss: true
 }, (f) => {
-  console.log('F:', f);
+  assert.notEqual(f, undefined);
 });

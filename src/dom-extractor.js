@@ -71,7 +71,7 @@ function cssCallback($, options, callback) {
     nodeCache.set(cacheKey, juice.juiceDocument($, {
       extraCss: options.extraCss || ''
     })('body').html());
-    callback(nodeCache.get(cacheKey)[cacheKey]);
+    callback(nodeCache.get(cacheKey));
   } catch (e) {
     callback();
   }
