@@ -120,14 +120,10 @@ extractor.fetch = (data, options, callback) => {
   if (isValidUrl) {
     cacheKey = `${data}#${options.selector}#css${options.inlineCss}#innerText${options.innerText}`;
     const cachedValue = nodeCache.get(cacheKey);
-
-    if (cachedValue[cacheKey] !== undefined) {
+    if (cachedValue && cachedValue[cacheKey] !== undefined) {
       callback(cachedValue[cacheKey]);
       return;
     }
-  }
-
-  if (isValidUrl) {
     if (data.indexOf('http') !== 0) {
       data = `http://${data}`;
     }

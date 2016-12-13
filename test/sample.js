@@ -1,4 +1,4 @@
-const domextractor = require('..');
+const domextractor = require('./../src/dom-extractor');
 
 domextractor.fetch("<html><head><style>.b{background-color:#eee}</style></head><body><div class='b'>"
   + "<a href='ok'>ok mec</a></div><div class='c'>ok</div></body></html>",
@@ -44,7 +44,7 @@ domextractor.fetch("<html><head><style>.b{background-color:#eee}</style></head><
   });
 
 domextractor.fetch('http://www.camif.fr/espace-service/livraison-gratuite.html', {
-  selector: '.contentpconseil',
+  selector: 'div.contentpconseil',
   innerText: false,
   inlineCss: true
 }, (f) => {
