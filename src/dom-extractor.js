@@ -71,7 +71,7 @@ function cssCallback($, options, callback) {
     nodeCache.set(cacheKey, juice.juiceDocument($, {
       extraCss: options.extraCss || ''
     })('body').html());
-    callback(nodeCache.get(cacheKey)[cacheKey]);
+    callback(nodeCache.get(cacheKey));
   } catch (e) {
     callback();
   }
@@ -120,14 +120,10 @@ extractor.fetch = (data, options, callback) => {
   if (isValidUrl) {
     cacheKey = `${data}#${options.selector}#css${options.inlineCss}#innerText${options.innerText}`;
     const cachedValue = nodeCache.get(cacheKey);
-
-    if (cachedValue[cacheKey] !== undefined) {
+    if (cachedValue && cachedValue[cacheKey] !== undefined) {
       callback(cachedValue[cacheKey]);
       return;
     }
-  }
-
-  if (isValidUrl) {
     if (data.indexOf('http') !== 0) {
       data = `http://${data}`;
     }
