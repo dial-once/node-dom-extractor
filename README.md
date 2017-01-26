@@ -60,6 +60,5 @@ app.use('/proxy', extractor.middleware());
 ### Running tests
 ```
 npm install
-npm install -g jshint
 npm test
 ```
