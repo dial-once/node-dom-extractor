@@ -27,7 +27,9 @@ function cleanRelativePathes($, absoluteUrl) {
 /* eslint no-param-reassign: "off" */
 function cleanOptions(options) {
   if (options === undefined) {
-    options.selector = 'body';
+    options = {
+      selector: 'body'
+    };
   } else if (typeof options === 'string') { // keeping compatiblity with version < v0.0.7
     if (options === '/') {
       options = {
@@ -107,7 +109,6 @@ function domCallback(html, options, callback) {
 }
 
 extractor.fetch = (data, options, callback) => {
-  let cacheKey = null;
   const isValidUrl = utils.isValidUrl(data);
   if (options instanceof Function) {
     callback = options;
@@ -118,7 +119,7 @@ extractor.fetch = (data, options, callback) => {
   options.isValidUrl = isValidUrl;
 
   if (isValidUrl) {
-    cacheKey = `${data}#${options.selector}#css${options.inlineCss}#innerText${options.innerText}`;
+    const cacheKey = `${data}#${options.selector}#css${options.inlineCss}#innerText${options.innerText}`;
     const cachedValue = nodeCache.get(cacheKey);
     if (cachedValue && cachedValue[cacheKey] !== undefined) {
       callback(cachedValue[cacheKey]);
