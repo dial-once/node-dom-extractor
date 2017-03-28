@@ -1,31 +1,27 @@
 .PHONY: test
-run:
-	node index.js
+
 deps:
-	npm i -g istanbul mocha
 	npm i
+
 lint:
-	./node_modules/.bin/eslint .
-test: 
+	node_modules/.bin/eslint .
+
+test:
 	make lint
 	make cover
-	@echo "Unit tests are done!"
-init:
-	sed -i 's/{service-name}/$(NAME)/g' package.json
-	sed -i 's/{service-name}/$(NAME)/g' README.md
-	sed -i 's/{service-name}/$(NAME)/g' sonar-project.properties
-	cp .env.tpl .env
+
 cover:
-	istanbul cover _mocha -- test --recursive --timeout=10000
+	node_modules/.bin/istanbul cover  node_modules/.bin/_mocha -- test --recursive --timeout=10000
+
 sonar:
 	sed '/sonar.projectVersion/d' ./sonar-project.properties > tmp && mv tmp sonar-project.properties
 	echo sonar.projectVersion=`cat package.json | python -c "import json,sys;obj=json.load(sys.stdin);print obj['version'];"` >> sonar-project.properties
-	wget http://repo1.maven.org/maven2/org/codehaus/sonar/runner/sonar-runner-dist/2.4/sonar-runner-dist-2.4.zip
-	unzip sonar-runner-dist-2.4.zip
+	wget https://sonarsource.bintray.com/Distribution/sonar-scanner-cli/sonar-scanner-2.8.zip
+	unzip sonar-scanner-2.8.zip
 ifdef CI_PULL_REQUEST
-	@sonar-runner-2.4/bin/sonar-runner -e -Dsonar.analysis.mode=preview -Dsonar.github.pullRequest=${shell basename $(CI_PULL_REQUEST)} -Dsonar.github.repository=$(REPO_SLUG) -Dsonar.github.oauth=$(GITHUB_TOKEN) -Dsonar.login=$(SONAR_LOGIN) -Dsonar.password=$(SONAR_PASS) -Dsonar.host.url=$(SONAR_HOST_URL)
+	@sonar-scanner-2.8/bin/sonar-runner -e -Dsonar.analysis.mode=preview -Dsonar.github.pullRequest=${shell basename $(CI_PULL_REQUEST)} -Dsonar.github.repository=$(REPO_SLUG) -Dsonar.github.oauth=$(GITHUB_TOKEN) -Dsonar.login=$(SONAR_LOGIN) -Dsonar.password=$(SONAR_PASS) -Dsonar.host.url=$(SONAR_HOST_URL)
 endif
 ifeq ($(CIRCLE_BRANCH),develop)
-	@sonar-runner-2.4/bin/sonar-runner -e -Dsonar.analysis.mode=publish -Dsonar.host.url=$(SONAR_HOST_URL) -Dsonar.login=$(SONAR_LOGIN) -Dsonar.password=$(SONAR_PASS)
+	@sonar-scanner-2.8/bin/sonar-runner -e -Dsonar.analysis.mode=publish -Dsonar.host.url=$(SONAR_HOST_URL) -Dsonar.login=$(SONAR_LOGIN) -Dsonar.password=$(SONAR_PASS)
 endif
-	rm -rf sonar-runner-2.4 sonar-runner-dist-2.4.zip
+	rm -rf sonar-scanner-2.8 sonar-scanner-2.8.zip
