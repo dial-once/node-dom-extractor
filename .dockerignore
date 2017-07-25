@@ -1,0 +1,14 @@
+.git/
+node_modules/
+spec/
+coverage/
+.dockerignore
+.env
+.env.tpl
+.gitignore
+.eslintignore
+.eslintrc
+Dockerfile
+LICENSE
+README.md
+sonar-project.properties
