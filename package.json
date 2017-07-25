@@ -5,7 +5,7 @@
   "main": "index.js",
   "scripts": {
     "test": "./node_modules/.bin/eslint . && ./node_modules/jasmine-node/bin/jasmine-node test",
-    "start": "make run"
+    "start": "node index.js"
   },
   "repository": {
     "type": "git",
