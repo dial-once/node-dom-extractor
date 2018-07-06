@@ -1,11 +1,14 @@
 node-dom-extractor
 ==================
-[![CircleCI](https://circleci.com/gh/dial-once/node-dom-extractor/tree/master.svg?style=svg)](https://circleci.com/gh/dial-once/node-dom-extractor/tree/master)
-[![Coverage](http://badges.dialonce.io/?resource=node-dom-extractor&metrics=coverage)](http://sonar.dialonce.io/overview/coverage?id=node-dom-extractor)
-[![Sqale](http://badges.dialonce.io/?resource=node-dom-extractor&metrics=sqale_rating)](http://sonar.dialonce.io/overview/debt?id=node-dom-extractor)
-[![Codacy Badge](https://img.shields.io/codacy/3e4f92342e704e48a14f24b235c94935.svg)](https://www.codacy.com/public/dialonce/node-dom-extractor)
-[![Dependency Status](https://david-dm.org/dial-once/node-dom-extractor.svg)](https://david-dm.org/dial-once/node-dom-extractor)
 
+
+[![Pipeline Status](https://gitlab.com/dial-once/node-dom-extractor/badges/master/pipeline.svg)](https://gitlab.com/dial-once/node-dom-extractor/commits/master)
+[![Sonar](http://proxy.dialonce.net/sonar/api/badges/gate?key=node-dom-extractor)](http://sonar.dialonce.net/dashboard?id=node-dom-extractor)
+[![Sonar](http://proxy.dialonce.net/sonar/api/badges/measure?key=node-dom-extractor&metric=ncloc)](http://sonar.dialonce.net/dashboard?id=node-dom-extractor)
+[![Sonar](http://proxy.dialonce.net/sonar/api/badges/measure?key=node-dom-extractor&metric=coverage)](http://sonar.dialonce.net/dashboard?id=node-dom-extractor)
+[![Sonar](http://proxy.dialonce.net/sonar/api/badges/measure?key=node-dom-extractor&metric=code_smells)](http://proxy.dialonce.net/sonar/api/badges/measure?key=node-dom-extractor&metric=coverage)
+[![Sonar](http://proxy.dialonce.net/sonar/api/badges/measure?key=node-dom-extractor&metric=bugs)](http://sonar.dialonce.net/dashboard?id=node-dom-extractor)
+[![Sonar](http://proxy.dialonce.net/sonar/api/badges/measure?key=node-dom-extractor&metric=sqale_debt_ratio)](http://sonar.dialonce.net/dashboard?id=node-dom-extractor)
 
 A node package used to extract a DOM element from a remote page or a string, using selectors. Based on jsdom for fetching and parsing, and juice for inlining css.
 
