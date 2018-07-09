@@ -1,0 +1,12 @@
+image: dialonce/gitlab
+
+cache:
+  paths:
+  - node_modules/
+
+tests:
+  script:
+   - make deps
+   - make test
+   - make sonar
+
