@@ -1,10 +1,10 @@
-const utils = require('./dom-utils');
 const cheerio = require('cheerio');
 const request = require('request');
 const juice = require('juice');
 const NodeCache = require('node-cache');
 const cssom = require('cssom');
 const url = require('url');
+const utils = require('./dom-utils');
 
 const extractor = module.exports;
 
@@ -139,25 +139,24 @@ extractor.fetch = (data, options, callback) => {
   }
 };
 
-extractor.middleware = () =>
-  (req, res, next) => {
-    const params = url.parse(req.url, true).query;
-    if (params.url !== undefined && params.selector !== undefined) {
-      params.selector = params.selector.replace('|sharp|', '#');
-      if (params.extraCss !== undefined) {
-        params.extraCss = params.extraCss.replace('|sharp|', '#');
-      }
-      extractor.fetch(params.url, {
-        selector: params.selector,
-        extraCss: params.extraCss,
-        removeLinks: params.removeLinks || false
-      }, (response) => {
-        if (response !== undefined) {
-          res.write(response);
-        }
-        res.end();
-      });
-    } else {
-      next();
+extractor.middleware = () => (req, res, next) => {
+  const params = url.parse(req.url, true).query;
+  if (params.url !== undefined && params.selector !== undefined) {
+    params.selector = params.selector.replace('|sharp|', '#');
+    if (params.extraCss !== undefined) {
+      params.extraCss = params.extraCss.replace('|sharp|', '#');
     }
-  };
+    extractor.fetch(params.url, {
+      selector: params.selector,
+      extraCss: params.extraCss,
+      removeLinks: params.removeLinks || false
+    }, (response) => {
+      if (response !== undefined) {
+        res.write(response);
+      }
+      res.end();
+    });
+  } else {
+    next();
+  }
+};
