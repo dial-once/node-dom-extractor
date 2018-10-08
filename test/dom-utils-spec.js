@@ -1,6 +1,6 @@
 // test/dom-utils-spec.js
-const domutils = require('../src/dom-utils');
 const assert = require('assert');
+const domutils = require('../src/dom-utils');
 
 describe('dom utils URL validation', () => {
   it('should handle bad parameter [no param]', () => {
