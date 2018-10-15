@@ -15,3 +15,4 @@
 /.sonar/**
 /logs/**
 /.idea/**
+/.nyc_output/**
