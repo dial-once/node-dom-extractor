@@ -1,1 +1,11 @@
+.git
 test/
+node_modules
+coverage
+test
+.gitignore
+.eslintignore
+.eslintrc
+.npmignore
+Makefile
+sonar-project.properties
