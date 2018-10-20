@@ -1,7 +1,6 @@
 node-dom-extractor
 ==================
 
-
 [![Pipeline Status](https://gitlab.com/dial-once/node-dom-extractor/badges/master/pipeline.svg)](https://gitlab.com/dial-once/node-dom-extractor/commits/master)
 [![Sonar](http://proxy.dialonce.net/sonar/api/badges/gate?key=node-dom-extractor)](http://sonar.dialonce.net/dashboard?id=node-dom-extractor)
 [![Sonar](http://proxy.dialonce.net/sonar/api/badges/measure?key=node-dom-extractor&metric=ncloc)](http://sonar.dialonce.net/dashboard?id=node-dom-extractor)
@@ -33,7 +32,7 @@ extractor.fetch("<div class='a'>Hello</div><div class='b'>World</div>!", ".a", f
 ```
 
 #### Note about # selector
-When you use # as a selector, the browser do not send the data since it is a keyword for anchoring things in page, browser side.  
+When you use # as a selector, the browser do not send the data since it is a keyword for anchoring things in page, browser side.
 To use it anyway, use |sharp| as the selector.
 
 #### Using options

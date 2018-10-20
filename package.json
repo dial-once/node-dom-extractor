@@ -4,8 +4,10 @@
   "description": "A remote HTML page DOM extractor. Extracts what you want from a remote page or a string, using selectors. Based on request for fetching, cheerios for parsing, cssom for checking css rules and juice for inlining css.",
   "main": "index.js",
   "scripts": {
-    "test": "./node_modules/.bin/eslint . && ./node_modules/jasmine-node/bin/jasmine-node test",
-    "start": "node index.js"
+    "start": "node index.js",
+    "lint": "./node_modules/.bin/eslint .",
+    "cover": "CONSOLE_LOGGING=false ./node_modules/.bin/nyc --reporter=lcov ./node_modules/.bin/_mocha test --recursive --timeout=10000 --exit",
+    "test": "npm run lint && ./node_modules/jasmine-node/bin/jasmine-node test"
   },
   "repository": {
     "type": "git",
@@ -32,13 +34,13 @@
     "url": "^0.11.0"
   },
   "devDependencies": {
-    "eslint": "^3.18.0",
-    "eslint-config-airbnb": "^13.0.0",
-    "eslint-plugin-import": "^2.2.0",
-    "eslint-plugin-jsx-a11y": "^2.2.3",
-    "eslint-plugin-react": "^6.8.0",
-    "istanbul": "^0.4.5",
-    "jasmine-node": "^1.14.5",
-    "mocha": "^5.2.0"
+    "eslint": "^5.4.0",
+    "eslint-config-airbnb": "^17.1.0",
+    "eslint-plugin-import": "^2.14.0",
+    "eslint-plugin-jsx-a11y": "^6.1.1",
+    "eslint-plugin-react": "^7.11.1",
+    "mocha": "^5.2.0",
+    "nyc": "^12.0.2",
+    "jasmine-node": "^1.14.5"
   }
 }
