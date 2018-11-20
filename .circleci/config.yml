@@ -32,8 +32,11 @@ jobs:
           - node_modules
           key: v1-dependencies-{{ .Branch }}-{{ checksum "package.json" }}
       - run:
+          name: Linting
+          command: make lint
+      - run:
           name: Test project
-          command: make test
+          command: make cover
 
       # Special step used to persist a temporary file to be used by another job in the workflow
       - persist_to_workspace:
